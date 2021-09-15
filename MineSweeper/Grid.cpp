@@ -31,6 +31,9 @@ void Grid::Initialize(int rows, int cols)
 	// Distribute the bombs -- O ( rows * cols )
 	DistributeBombs();
 
+	// Count of the unexposed cells (without bombs)
+	unexposed_cell_count_ = rows * cols - bombs_.size();
+
 	// Count the neighbor bombs -- O(number Of Bombs)
 	UpdateNeighbourBombCount();
 }
@@ -46,6 +49,7 @@ void Grid::DistributeBombs()
 
 	// Loop through to figure out if that cell will have bomb or not
 	auto [rows, cols] = GetSize();
+
 	for (int i = 0; i < rows; ++i) {
 		for (int j = 0; j < cols; ++j) {
 			double rand_num = static_cast<double>(rand()) / RAND_MAX;
@@ -103,10 +107,6 @@ std::pair<bool, std::vector<std::vector<int>>> Grid::Open(int i, int j)
 			cells_[idx[0]][idx[1]].ExposeCell();
 		}
 	}
-	else
-	{
-		CheckIfWon();
-	}
 	return { is_not_bomb, visited };
 }
 
@@ -128,6 +128,13 @@ bool Grid::OpenUsingDFS(int i, int j, std::vector<std::vector<int>>& visited)
 	if (visited.size() == 1 && cells_[i][j].HasBomb())
 		return false; 
 
+	// if it is not a bomb, decrement the count of the unexposed cells
+	unexposed_cell_count_--;
+
+	// check if we've won - i.e. unexposed_cell_count_ == 0
+	if (unexposed_cell_count_ == 0)
+		return has_won_ = true;
+
 	// Check if the cell that we just exposed has a number in it
 	if (cells_[i][j].Neighbors() > 0) return true;
 
@@ -140,34 +147,4 @@ bool Grid::OpenUsingDFS(int i, int j, std::vector<std::vector<int>>& visited)
 		OpenUsingDFS(ii, jj, visited);
 	}
 	return true;
-}
-
-inline long Grid::IndexSingle(int i, int j)
-{
-	return cells_.empty() ? -1 : i * static_cast<long>(cells_[0].size()) + j;
-}
-
-inline std::pair<int, int> Grid::IndexPair(long idx)
-{
-	return std::pair<int, int>();
-}
-
-bool Grid::CheckIfWon()
-{
-	if (has_won_) return has_won_;
-
-	// Currently loops throgh everything - need to improve this!
-	for (const auto& a : cells_)
-	{
-		for (const auto& curr_cell : a)
-		{
-			if (!curr_cell.HasBomb() && !curr_cell.IsExposed())
-			{
-				has_won_ = false;
-				return has_won_;
-			}
-		}
-	}
-	has_won_ = true;
-	return has_won_;
 }

@@ -110,9 +110,9 @@ bool GridWindow::OnClick(long xx, long yy)
 	return true;
 }
 
-std::pair<std::string, std::string> GridWindow::MessageToPrint()
+std::pair<std::string, std::string> GridWindow::MessageToPrint() const
 {
-	if (grid_.CheckIfWon())
+	if (grid_.HasWon())
 		return { "Congratulations...", "Congratulations. You have Won. Please play again." };
 	else if (grid_.HasLost())
 		return { "Sorry..", "Sorry. You have Lost. Please try again." };

@@ -16,11 +16,6 @@ void Cell::UnFlagCell()
 	if (cell_state_ == State::FLAGGED) cell_state_ = State::NOT_EXPOSED;
 }
 
-void Cell::StartProcessing()
-{
-	cell_state_ = State::PROCESSING;
-}
-
 void Cell::AddBomb()
 {
 	has_bomb_ = true;
@@ -41,19 +36,9 @@ bool Cell::IsFlagged() const
 	return cell_state_ == State::FLAGGED;
 }
 
-bool Cell::IsNotProcessing() const
-{
-	return cell_state_ != State::PROCESSING;
-}
-
 bool Cell::HasBomb() const
 {
 	return has_bomb_;
-}
-
-bool Cell::HasNonBombNeighbor() const
-{
-	return (!has_bomb_ && IsNotProcessing() && !IsExposed());
 }
 
 int Cell::Neighbors() const

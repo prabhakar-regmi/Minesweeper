@@ -1,6 +1,7 @@
 #pragma once
 #include "Grid.h"
 #include "Measurement.h"
+#include <string>
 
 class GridWindow
 {
@@ -8,9 +9,10 @@ public:
 	GridWindow() = default;
 
 	void Initialize(HWND window, int size);
+
 	bool OnClick(long x, long y);
 	bool OnRightClick(long x, long y);
-	std::pair<std::string, std::string> MessageToPrint();
+	std::pair<std::string, std::string> MessageToPrint() const;
 
 	// Getters
 	RECT GetGridRect(long x, long y) const;
@@ -23,6 +25,7 @@ public:
 	const Cell& GetCellAt(int i, int j) const { return grid_.GetCellAt(i, j); }
 	int NumBombs() const { return grid_.NumBombs(); }
 	int NumFlagged() const { return grid_.NumFlagged(); }
+	int NumLeftToExpose() const { return grid_.NumLeftToExpose(); }
 	
 private:
 	std::pair<int, int> GetIndexFromPixel(long xx, long yy) const;

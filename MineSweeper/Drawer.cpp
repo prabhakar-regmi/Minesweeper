@@ -130,14 +130,17 @@ void Drawer::WriteCellText(const Cell& cell, HDC device, Measurement& measuremen
 
 void Drawer::DrawInformation(GridWindow& grid_window, HDC hdc)
 {
-	std::string total_bombs = "TOTAL BOMBS = " + std::to_string(grid_window.NumBombs());
-	std::string total_flagged = "TOTAL FLAGGED = " + std::to_string(grid_window.NumFlagged());
+	std::string total_bombs = "BOMBS = " + std::to_string(grid_window.NumBombs());
+	std::string total_flagged = "FLAGGED = " + std::to_string(grid_window.NumFlagged());
+	std::string total_left = "TO EXPOSE = " + std::to_string(grid_window.NumLeftToExpose());
 
-	wchar_t* total_bombs_str = new wchar_t[25];
-	wchar_t* total_flagged_str = new wchar_t[25];
+	wchar_t* total_bombs_str = new wchar_t[15];
+	wchar_t* total_flagged_str = new wchar_t[15];
+	wchar_t* total_left_str = new wchar_t[15];
 
 	MultiByteToWideChar(CP_ACP, 0, total_bombs.c_str(), -1, total_bombs_str, 25);
 	MultiByteToWideChar(CP_ACP, 0, total_flagged.c_str(), -1, total_flagged_str, 25);
+	MultiByteToWideChar(CP_ACP, 0, total_left.c_str(), -1, total_left_str, 25);
 
 	SetTextColor(hdc, RGB(0, 0, 0));
 
@@ -149,7 +152,9 @@ void Drawer::DrawInformation(GridWindow& grid_window, HDC hdc)
 	HFONT hFontOld = (HFONT)SelectObject(hdc, font);
 
 	DrawText(hdc, total_bombs_str, -1, &(grid_window.GetRectForText()), DT_SINGLELINE | DT_LEFT | DT_VCENTER);
-	DrawText(hdc, total_flagged_str, -1, &(grid_window.GetRectForText()), DT_SINGLELINE | DT_RIGHT | DT_VCENTER);
+	DrawText(hdc, total_flagged_str, -1, &(grid_window.GetRectForText()), DT_SINGLELINE | DT_CENTER | DT_VCENTER);
+	DrawText(hdc, total_left_str, -1, &(grid_window.GetRectForText()), DT_SINGLELINE | DT_RIGHT | DT_VCENTER);
+
 
 	SelectObject(hdc, hFontOld);
 	DeleteObject(font);

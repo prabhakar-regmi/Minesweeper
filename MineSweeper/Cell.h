@@ -3,21 +3,18 @@
 class Cell
 {
 public:
-	enum State{EXPOSED, NOT_EXPOSED, PROCESSING, FLAGGED};
+	enum State{EXPOSED, NOT_EXPOSED, FLAGGED};
 	Cell() = default;
 	void ExposeCell();
 	void FlagCell();
 	void UnFlagCell();
-	void StartProcessing();
 	void AddBomb();
 	void IncreaseNeighborsCount();
 
 	// Getters
 	bool IsExposed() const;
 	bool IsFlagged() const;
-	bool IsNotProcessing() const;
 	bool HasBomb() const;
-	bool HasNonBombNeighbor() const;
 	int Neighbors() const;
 
 private:
